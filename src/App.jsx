@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
+import Button from './components/Button';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -23,6 +24,7 @@ const App = () => {
         <div>
           username:
           <input
+            type='text'
             value={username}
             onChange={({ target }) => setUsername(target.value)}
           />
@@ -30,11 +32,12 @@ const App = () => {
         <div>
           password:
           <input
+            type='password'
             value={password}
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button type='submit'>login</button>
+        <Button>login</Button>
       </form>
       <h2>blogs</h2>
       {blogs.map((blog) => (
