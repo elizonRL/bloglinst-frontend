@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import Blog from './components/Blog';
-import blogService from './services/blogs';
-import LoginForm from './components/LoginForm';
+import { useState, useEffect } from "react";
+import Blog from "./components/Blog";
+import blogService from "./services/blogs";
+import LoginForm from "./components/LoginForm";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -17,9 +17,9 @@ const App = () => {
     try {
       const user = await blogService.login({ username, password });
       setUser(user);
-
-      setUsername('');
-      setPassword('');
+      localStorage.setItem("user", JSON.stringify(user))
+      setUsername("");
+      setPassword("");
     } catch (error) {
       console.log(error);
     }
@@ -27,14 +27,15 @@ const App = () => {
 
   return (
     <div>
-      <LoginForm
-        handelSubmit={handelSubmit}
-        username={username}
-        setUsername={setUsername}
-        password={password}
-        setPassword={setPassword}
-      />
-      {user && (
+      {user == null ? (
+        <LoginForm
+          handelSubmit={handelSubmit}
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+        />
+      ) : (
         <div>
           <h2>blogs</h2>
 
