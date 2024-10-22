@@ -3,7 +3,6 @@ import Blog from './components/Blog';
 import blogService from './services/blogs';
 import LoginForm from './components/LoginForm';
 
-
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState('');
@@ -28,7 +27,13 @@ const App = () => {
 
   return (
     <div>
-      <LoginForm handelSubmit={handelSubmit} username={username} setUsername={setUsername} password={password} setPassword={setPassword} />
+      <LoginForm
+        handelSubmit={handelSubmit}
+        username={username}
+        setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
+      />
       {user && (
         <div>
           <h2>blogs</h2>
