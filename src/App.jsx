@@ -7,15 +7,22 @@ const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
-  const handelSubmit = (event) => {
+  const handelSubmit = async (event) => {
     event.preventDefault();
-    console.log('submit', username, password);
-    setUsername('');
-    setPassword('');
+    try {
+      const user = await blogService.login({ username, password });
+      setUser(user);
+
+      setUsername('');
+      setPassword('');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -39,10 +46,15 @@ const App = () => {
         </div>
         <Button>login</Button>
       </form>
-      <h2>blogs</h2>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
+      {user && (
+        <div>
+          <h2>blogs</h2>
+
+          {blogs.map((blog) => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
