@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
-import Button from './components/Button';
+import LoginForm from './components/LoginForm';
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -27,25 +28,7 @@ const App = () => {
 
   return (
     <div>
-      <form onSubmit={handelSubmit}>
-        <div>
-          username:
-          <input
-            type='text'
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password:
-          <input
-            type='password'
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <Button>login</Button>
-      </form>
+      <LoginForm handelSubmit={handelSubmit} username={username} setUsername={setUsername} password={password} setPassword={setPassword} />
       {user && (
         <div>
           <h2>blogs</h2>
