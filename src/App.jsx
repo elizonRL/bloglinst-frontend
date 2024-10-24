@@ -24,6 +24,9 @@ const App = () => {
       console.log(error);
     }
   };
+  
+  const userFronStorage = localStorage.getItem("user")
+  console.log(JSON.parse(userFronStorage))
 
   return (
     <div>
