@@ -30,8 +30,6 @@ const App = () => {
     }
   };
 
- /*  const userFronStorage = localStorage.getItem("user");
-  console.log(JSON.parse(userFronStorage)); */
 
   if (user === null) {
     return (
