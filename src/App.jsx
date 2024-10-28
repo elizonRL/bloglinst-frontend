@@ -12,25 +12,30 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
+  useEffect(()=>{
+   const  userLocal = localStorage.getItem("user")
+    console.log(JSON.parse(userLocal).token)
+    setUser(JSON.parse(userLocal))
+  },[])
   const handelSubmit = async (event) => {
     event.preventDefault();
     try {
       const user = await blogService.login({ username, password });
       setUser(user);
-      localStorage.setItem("user", JSON.stringify(user))
+      localStorage.setItem("user", JSON.stringify(user));
       setUsername("");
       setPassword("");
     } catch (error) {
       console.log(error);
     }
   };
-  
-  const userFronStorage = localStorage.getItem("user")
-  console.log(JSON.parse(userFronStorage))
 
-  return (
-    <div>
-      {user == null ? (
+ /*  const userFronStorage = localStorage.getItem("user");
+  console.log(JSON.parse(userFronStorage)); */
+
+  if (user === null) {
+    return (
+      <>
         <LoginForm
           handelSubmit={handelSubmit}
           username={username}
@@ -38,17 +43,18 @@ const App = () => {
           password={password}
           setPassword={setPassword}
         />
-      ) : (
-        <div>
-          <h2>blogs</h2>
-
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
-          ))}
-        </div>
-      )}
-    </div>
+      </>
+    );
+  }
+  return (
+    <>
+      <h2>Blogs</h2>
+      {blogs.map((blog) => (
+        <Blog key={blog.id} blog={blog} />
+      ))}
+    </>
   );
+
 };
 
 export default App;
