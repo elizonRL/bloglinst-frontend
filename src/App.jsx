@@ -1,21 +1,22 @@
-import { useState, useEffect } from 'react';
-import Blog from './components/Blog';
-import blogService from './services/blogs';
-import LoginForm from './components/LoginForm';
-import AddBlogForm from './components/addblogfrom';
+import { useState, useEffect } from "react";
+import Blog from "./components/Blog";
+import blogService from "./services/blogs";
+import LoginForm from "./components/LoginForm";
+import AddBlogForm from "./components/addblogfrom";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+  const [errorMessage, SetErrorMesage] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
   useEffect(() => {
-    const userLocal = localStorage.getItem('user');
+    const userLocal = localStorage.getItem("user");
     if (userLocal) {
       const user = JSON.parse(userLocal);
       setUser(user);
@@ -28,21 +29,30 @@ const App = () => {
     try {
       const user = await blogService.login({ username, password });
       setUser(user);
-      localStorage.setItem('user', JSON.stringify(user));
-      setUsername('');
-      setPassword('');
+      localStorage.setItem("user", JSON.stringify(user));
+      setUsername("");
+      setPassword("");
     } catch (error) {
+      SetErrorMesage(error.response.data.error);
+      setTimeout(() => {
+        SetErrorMesage(null);
+      }, 4000);
       console.log(error);
     }
   };
   const handelLogout = () => {
     setUser(null);
-    localStorage.removeItem('user');
+    localStorage.removeItem("user");
   };
 
   if (user === null) {
     return (
       <>
+        {errorMessage && (
+          <span style={{ color: "red", border: "1px solid red" }}>
+            {errorMessage}
+          </span>
+        )}
         <LoginForm
           handelSubmit={handelSubmit}
           username={username}
@@ -56,8 +66,13 @@ const App = () => {
   return (
     <>
       <h2>Blogs</h2>
-      <p>{user.name} logged in <button type='submit' onClick={handelLogout}>logout</button></p>
-      <AddBlogForm/>
+      <p>
+        {user.name} logged in{" "}
+        <button type="submit" onClick={handelLogout}>
+          logout
+        </button>
+      </p>
+      <AddBlogForm />
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
